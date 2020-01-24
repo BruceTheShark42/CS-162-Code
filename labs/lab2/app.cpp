@@ -4,6 +4,7 @@
 #define MIN_A 90.0
 #define MIN_B 80.0
 #define MIN_C 70.0
+#define MIN_D 60.0
 
 double GetAvg()
 {
@@ -32,6 +33,8 @@ char DetermineGrade(double finalAvg)
 		return 'B';
 	else if (finalAvg >= MIN_C)
 		return 'C';
+	else if (finalAvg >= MIN_D)
+		return 'D';
 	else
 		return 'F';
 }
@@ -49,8 +52,11 @@ void PrintMsg(char grade)
 		case 'C':
 			std::cout << "You've passed!\n";
 			break;
-		default:
+		case 'D':
 			std::cout << "You need to study more!\n";
+			break;
+		default:
+			std::cout << "You slip on a banana peel...\n";
 			break;
 	}
 }

@@ -1,0 +1,20 @@
+makefile:
+app: app.cpp
+	g++ -o app app.cpp
+
+run:
+	./app
+
+clobber:
+	rm app
+
+gdb_stuff.txt:
+1) While in gdb:
+	i) run executable_name // runs the executable
+	ii) n // goes to the next line
+	iii) s // steps into a function/method if on the line to next execute
+	iv) set variable_name=value // set the variable to a value
+2) Idea for make:
+	i) put a label "rundbg" for "run debug" as the following:
+		rundbg:
+			gdb app
