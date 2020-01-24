@@ -1,0 +1,46 @@
+bool insert(int position, int val, int* intList, int& size)
+{
+	//			     |  This is not >= so that if
+	//			     |  position == size, it will
+	//			     v  act like an append method
+	if (position < 0 || position > size)
+		return false;
+	
+	for (int i = size; i > position; --i)
+		intList[i] = intList[i - 1];
+	
+	intList[position] = val;
+	++size;
+	
+	return true;
+}
+
+------- I wasn't sure if you also wanted the remove function.
+	Even though the lab doesn't require it, it felt too
+	important to leave out.
+
+bool remove(int position, int& val, int* intList, int& size)
+{
+	if (position < 0 || position >= size)
+		return false;
+	
+	val = intList[position];
+	
+	for (int i = position; i < size - 1; ++i)
+		intList[i] = intList[i + 1];
+	--size;
+	
+	return true;
+}
+
+------- Beginning of make output
+
+./app
+
+[ ]
+
+[ 4 40 25 10 20 ]
+remove failed
+40 is removed!
+
+[ 4 25 10 20 ]
