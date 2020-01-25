@@ -20,7 +20,6 @@
 // the separator tokens and that's the max.
 #define MAX_FILE_LINE_LEN 3 * MAX_CHARS + 23
 
-// TODO: --------------------------- Remove delimeter from inputs ---------------------------
 #define FILE_DELIMITER ';'
 #define SONG_FILE "songs.txt"
 
@@ -98,6 +97,17 @@ bool contains(char* str1, const char* str2)
 		if (has)
 			return true;
 	}
+	
+	return false;
+}
+
+bool contains(char* str, char c)
+{
+	unsigned int len = std::strlen(str);
+	
+	for (unsigned int i = 0; i < len; ++i)
+		if (str[i] == c)
+			return true;
 	
 	return false;
 }
@@ -274,12 +284,31 @@ int main()
 		if (!std::strcmp(userInput, "add"))
 		{
 			char* title = getString("Enter the song's title: ");
+			if (contains(title, FILE_DELIMITER))
+			{
+				std::cout << "The title cannot include a '" << FILE_DELIMITER << "'.\n";;
+				delete[] title;
+				continue;
+			}
+			
 			char* artist = getString("Enter the song's artist: ");
+			if (contains(artist, FILE_DELIMITER))
+			{
+				std::cout << "The artist cannot include a '" << FILE_DELIMITER << "'.\n";;
+				delete[] artist;
+				continue;
+			}
 			
 			unsigned int minutes = (unsigned int)getInt("Enter the song's duration in minutes rounded down: ");
 			unsigned int seconds = (unsigned int)getInt("Enter the remaining seconds: ");
 			
 			char* album = getString("Enter the song's album name: ");
+			if (contains(album, FILE_DELIMITER))
+			{
+				std::cout << "The album cannot include a '" << FILE_DELIMITER << "'.\n";
+				delete[] album;
+				continue;
+			}
 			
 			if (addSongToList(songs, songCount, title, artist, minutes, seconds, album))
 				alteredList = true;
