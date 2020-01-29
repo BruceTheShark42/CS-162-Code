@@ -1,3 +1,5 @@
+# Made by Bruce Cosgrove
+
 main: main.o SongList.o Song.o util.o
 	g++ -o main main.o SongList.o Song.o util.o
 

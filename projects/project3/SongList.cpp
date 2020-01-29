@@ -1,3 +1,5 @@
+// Made by Bruce Cosgrove
+
 #include "SongList.h"
 
 #include <iostream>

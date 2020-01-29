@@ -1,3 +1,5 @@
+// Made by Bruce Cosgrove
+
 #include "Song.h"
 
 #include <iostream>

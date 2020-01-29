@@ -1,3 +1,5 @@
+// Made by Bruce Cosgrove
+
 #ifndef SONG_H
 #define SONG_H
 
