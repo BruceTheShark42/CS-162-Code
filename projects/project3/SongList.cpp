@@ -132,6 +132,10 @@ void SongList::importFromFile()
 				add(title, artist, (unsigned int)std::stoi(minutes), 
 					(unsigned int)std::stoi(seconds), album, true);
 				
+				// Found the memory leak
+				delete[] minutes;
+				delete[] seconds;
+				
 				--linesLeft;
 			}
 			else
