@@ -1,3 +1,5 @@
+# Made by Bruce Cosgrove
+
 main: main.o Student.o
 	g++ -o main main.cpp Student.o
 

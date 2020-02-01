@@ -1,3 +1,5 @@
+// Made by Bruce Cosgrove
+
 #ifndef STUDENT_H
 #define STUDENT_H
 

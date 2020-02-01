@@ -1,3 +1,5 @@
+// Made by Bruce Cosgrove
+
 #include "Student.h"
 
 #include <iostream>
