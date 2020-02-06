@@ -4,13 +4,11 @@
 
 #include <iostream>
 
-Song::Song(char* title, char* artist, unsigned int minutes, unsigned int seconds, char* album)
+Song::Song(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album)
+	: title(title), artist(artist), album(album)
 {
-	this->title = title;
-	this->artist = artist;
 	duration.minutes = minutes + seconds / 60;
 	duration.seconds = seconds % 60;
-	this->album = album;
 }
 
 Song::~Song()
@@ -45,11 +43,9 @@ char* Song::getAlbum() const
 	return album;
 }
 
-void Song::print(unsigned int index) const
+void Song::print() const
 {
-	std::cout << "-----------------------\n"
-		  << "  Song " << index << ":\n"
-		  << "    - Title: " << title << '\n'
+	std::cout << "    - Title: " << title << '\n'
 		  << "    - Artist: " << artist << '\n'
 		  << "    - Duration: " << duration.minutes << ':' << (duration.seconds < 10 ? "0" : "") << duration.seconds << '\n'
 		  << "    - Album: " << album << '\n';

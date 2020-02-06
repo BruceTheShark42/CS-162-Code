@@ -6,7 +6,7 @@
 class Song
 {
 public:
-	Song(char* title, char* artist, unsigned int minutes, unsigned int seconds, char* album);
+	Song(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album);
 	~Song();
 public:
 	char* getTitle() const;
@@ -14,7 +14,7 @@ public:
 	unsigned int getMinutes() const;
 	unsigned int getSeconds() const;
 	char* getAlbum() const;
-	void print(unsigned int index) const;
+	void print() const;
 private:
 	char* title;
 	char* artist;

@@ -2,6 +2,7 @@
 
 #ifndef UTIL_H
 #define UTIL_H
+
 #define MAX_CHARS 100
 
 char* getString(const char* message);

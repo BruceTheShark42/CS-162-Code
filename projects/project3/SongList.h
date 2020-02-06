@@ -12,16 +12,17 @@ public:
 	SongList();
 	~SongList();
 public:
-	bool add(char* title, char* artist, unsigned int minutes, unsigned int seconds, char* album, bool silent = true);
-	void display();
-	void remove(int index);
-	int search(char* searchParameter, bool searchByArtist);
+	bool add(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album, bool silent = true);
+	void display() const;
+	void printSong(const unsigned int& index) const;
+	void remove(const int& index);
+	int search(char* searchParameter, bool searchByArtist) const;
 	
 	void importFromFile();
-	void exportToFile();
+	void exportToFile() const;
 	
 	unsigned int getSongCount() const;
-	Song* get(unsigned int index) const;
+	Song* get(const unsigned int& index) const;
 public:
 	static const char FILE_DELIMITER = ';';
 private:
