@@ -61,9 +61,9 @@ void SongList::printSong(const unsigned int& index) const
 	songs[index]->print();
 }
 
-void SongList::remove(const int& index)
+void SongList::remove(const unsigned int& index)
 {
-	if (index < 0 || index < songCount)
+	if (index < songCount)
 	{
 		for (unsigned int i = index; i < songCount - 1; ++i)
 			songs[i] = songs[i + 1];

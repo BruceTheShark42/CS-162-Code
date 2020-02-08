@@ -15,7 +15,7 @@ public:
 	bool add(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album, bool silent = true);
 	void display() const;
 	void printSong(const unsigned int& index) const;
-	void remove(const int& index);
+	void remove(const unsigned int& index);
 	int search(char* searchParameter, bool searchByArtist) const;
 	
 	void importFromFile();
