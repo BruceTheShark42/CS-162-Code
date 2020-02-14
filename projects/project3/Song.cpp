@@ -15,25 +15,11 @@ Song::~Song() {
 	delete[] album;
 }
 
-char* Song::getTitle() const {
-	return title;
-}
-
-char* Song::getArtist() const {
-	return artist;
-}
-
-unsigned int Song::getMinutes() const {
-	return duration.minutes;
-}
-
-unsigned int Song::getSeconds() const {
-	return duration.seconds;
-}
-
-char* Song::getAlbum() const {
-	return album;
-}
+char* Song::getTitle() const { return title; }
+char* Song::getArtist() const { return artist; }
+unsigned int Song::getMinutes() const { return duration.minutes; }
+unsigned int Song::getSeconds() const { return duration.seconds; }
+char* Song::getAlbum() const { return album; }
 
 void Song::print() const {
 	std::cout << "    - Title: " << title << '\n'

@@ -148,10 +148,5 @@ void SongList::exportToFile() const {
 		std::cout << "Unable to save songs. Sorry :/\n";
 }
 
-unsigned int SongList::getSongCount() const {
-	return songCount;
-}
-
-Song* SongList::get(const unsigned int& index) const {
-	return index < songCount ? songs[index] : nullptr;
-}
+unsigned int SongList::getSongCount() const { return songCount; }
+Song* SongList::get(const unsigned int& index) const { return index < songCount ? songs[index] : nullptr; }
