@@ -3,10 +3,9 @@
 #ifndef SONG_H
 #define SONG_H
 
-class Song
-{
+class Song {
 public:
-	Song(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album);
+	Song(char *title, char *artist, const unsigned int &minutes, const unsigned int &seconds, char *album);
 	~Song();
 public:
 	char* getTitle() const;
@@ -16,14 +15,13 @@ public:
 	char* getAlbum() const;
 	void print() const;
 private:
-	char* title;
-	char* artist;
-	struct
-	{
+	char *title;
+	char *artist;
+	struct {
 		unsigned int minutes;
 		unsigned int seconds;
 	} duration;
-	char* album;
+	char *album;
 };
 
 #endif

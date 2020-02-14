@@ -4,47 +4,38 @@
 
 #include <iostream>
 
-Song::Song(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album)
-	: title(title), artist(artist), album(album)
-{
+Song::Song(char *title, char *artist, const unsigned int &minutes, const unsigned int &seconds, char *album) : title(title), artist(artist), album(album) {
 	duration.minutes = minutes + seconds / 60;
 	duration.seconds = seconds % 60;
 }
 
-Song::~Song()
-{
+Song::~Song() {
 	delete[] title;
 	delete[] artist;
 	delete[] album;
 }
 
-char* Song::getTitle() const
-{
+char* Song::getTitle() const {
 	return title;
 }
 
-char* Song::getArtist() const
-{
+char* Song::getArtist() const {
 	return artist;
 }
 
-unsigned int Song::getMinutes() const
-{
+unsigned int Song::getMinutes() const {
 	return duration.minutes;
 }
 
-unsigned int Song::getSeconds() const
-{
+unsigned int Song::getSeconds() const {
 	return duration.seconds;
 }
 
-char* Song::getAlbum() const
-{
+char* Song::getAlbum() const {
 	return album;
 }
 
-void Song::print() const
-{
+void Song::print() const {
 	std::cout << "    - Title: " << title << '\n'
 		  << "    - Artist: " << artist << '\n'
 		  << "    - Duration: " << duration.minutes << ':' << (duration.seconds < 10 ? "0" : "") << duration.seconds << '\n'
