@@ -6,21 +6,21 @@
 #include <fstream>
 #include <cstring>
 
-SongList::SongList() : size(0U), maxSize(1U), altered(false), songs(new Song*[maxSongs]) {
+SongList::SongList() : songs(new Song*[MAX_SONGS]), songCount(0U), altered(false) {
 	importFromFile();
 }
 
 SongList::~SongList() {
 	if (altered) exportToFile();
 	else std::cout << "No changes made; no saving needeed.\n";
-	for (unsigned int i = 0; i < size; ++i)
+	for (unsigned int i = 0; i < songCount; ++i)
 		delete songs[i];
 	delete[] songs;
 }
 
 bool SongList::add(char* title, char* artist, const unsigned int& minutes, const unsigned int& seconds, char* album, bool silent) {
-	if (songCount < maxSize) {
-		songs[size++] = new Song(title, artist, minutes, seconds, album);
+	if (songCount < MAX_SONGS) {
+		songs[songCount] = new Song(title, artist, minutes, seconds, album);
 		if (!silent) {
 			std::cout << "Successfully added \"" << title << "\" to the list at index " << songCount << ".\n";
 			altered = true;

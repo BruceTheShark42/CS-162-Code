@@ -7,14 +7,25 @@
 
 // Returns a char[] entered by the user
 char* getString(const char *message) {
-	// Print the message
 	std::cout << message;
-	char *in = new char[MAX_CHARS];
 	
-	// Get user input
-	std::cin.get(in, MAX_CHARS, '\n');
+	unsigned int length = 0;
+	unsigned int maxLength = 16;
+	char *in = new char[maxLength];
+	char c;
+	do {
+		std::cin.get(c);
+		if (length < maxLength) {
+			in[length++] = c;
+		} else {
+			char *newIn = new char[maxLength <<= 1];
+			memcpy(newIn, in, length);
+			newIn[length++] = c;
+			delete[] in;
+			in = newIn;
+		}
+	} while (c != '\n');
 	
-	// Help clean up io stuff
 	std::cin.get();
 	if (!std::cin) {
 		std::cin.clear();

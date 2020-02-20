@@ -23,12 +23,13 @@ public:
 public:
 	static const char FILE_DELIMITER = ';';
 private:
+	static const unsigned int MAX_SONGS = 100;
 	static const unsigned int MAX_FILE_LINE_LEN = 3 * MAX_CHARS + 23;
 	static constexpr const char *SONG_FILE = "songs.txt";
 private:
-	unsigned int size, maxSize;
-	bool altered;
 	Song **songs;
+	unsigned int songCount;
+	bool altered;
 };
 
 #endif
