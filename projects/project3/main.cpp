@@ -48,10 +48,10 @@ void add(SongList& list) {
 void remove(SongList& list) {
 	int index = getInt("Enter the index of the song you would like to remove: ", -1);
 	if (index >= 0 && index < list.getSongCount()) {
-		std::cout << "Are you sure you want to remove the song: \"" << list.get(index)->getTitle();
+		std::cout << "Are you sure you want to remove the song: \"" << list[index]->getTitle();
 		char *confirmation = getString("\"? (yes/no) ");
 		if (!std::strcmp(confirmation, "yes")) {
-			std::cout << "Successfully removed \"" << list.get(index)->getTitle() << "\"\n";
+			std::cout << "Successfully removed \"" << list[index]->getTitle() << "\"\n";
 			list.remove(index);
 		} else if (std::strcmp(confirmation, "no")) std::cout << "Taking \"" << confirmation << "\" as no.";
 		delete[] confirmation;

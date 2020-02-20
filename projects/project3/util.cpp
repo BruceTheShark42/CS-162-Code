@@ -9,7 +9,7 @@
 char* getString(const char *message) {
 	// Print the message
 	std::cout << message;
-	char* in = new char[MAX_CHARS];
+	char *in = new char[MAX_CHARS];
 	
 	// Get user input
 	std::cin.get(in, MAX_CHARS, '\n');
@@ -25,7 +25,7 @@ char* getString(const char *message) {
 }
 
 int getInt(const char *message, const int &returnError) {
-	char* numberInput = getString(message);
+	char *numberInput = getString(message);
 	
 	// Validate input
 	bool valid = true;
@@ -69,7 +69,7 @@ bool contains(char *str1, const char *str2) {
 	return false;
 }
 
-bool contains(char* str, char c) {
+bool contains(char *str, char c) {
 	unsigned int len = std::strlen(str);
 	for (unsigned int i = 0; i < len; ++i)
 		if (str[i] == c)

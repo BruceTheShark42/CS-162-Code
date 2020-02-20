@@ -16,12 +16,10 @@ public:
 	void printSong(const unsigned int &index) const;
 	void remove(const unsigned int &index);
 	int search(char *searchParameter, bool searchByArtist) const;
-	
 	void importFromFile();
 	void exportToFile() const;
-	
 	unsigned int getSongCount() const;
-	Song* get(const unsigned int &index) const;
+	Song* operator[](const unsigned int &index) const;
 public:
 	static const char FILE_DELIMITER = ';';
 private:

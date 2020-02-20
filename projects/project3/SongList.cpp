@@ -6,16 +6,13 @@
 #include <fstream>
 #include <cstring>
 
-SongList::SongList() : songs(new Song*[MAX_CHARS] {nullptr}), songCount(0U), altered(false) {
+SongList::SongList() : songs(new Song*[MAX_SONGS]), songCount(0U), altered(false) {
 	importFromFile();
 }
 
 SongList::~SongList() {
-	if (altered)
-		exportToFile();
-	else
-		std::cout << "No changes made; no saving needeed.\n";
-	
+	if (altered) exportToFile();
+	else std::cout << "No changes made; no saving needeed.\n";
 	for (unsigned int i = 0; i < songCount; ++i)
 		delete songs[i];
 	delete[] songs;
@@ -31,9 +28,8 @@ bool SongList::add(char* title, char* artist, const unsigned int& minutes, const
 		++songCount;
 		return true;
 	}
-	else if (!silent)
-		std::cout << "There are too many songs in your list.\n"
-				  << "Please remove some of them to add any more.\n";
+	else if (!silent) std::cout << "There are too many songs in your list.\n"
+								<< "Please remove some of them to add any more.\n";
 	return false;
 }
 
@@ -42,8 +38,7 @@ void SongList::display() const {
 		std::cout << "Here are your songs:\n";
 		for (unsigned int i = 0; i < songCount; ++i)
 			printSong(i);
-	} else
-		std::cout << "There are currently no songs in your list.\n";
+	} else std::cout << "There are currently no songs in your list.\n";
 }
 
 void SongList::printSong(const unsigned int& index) const {
@@ -53,19 +48,15 @@ void SongList::printSong(const unsigned int& index) const {
 
 void SongList::remove(const unsigned int& index) {
 	if (index < songCount) {
+		delete songs[index];
 		for (unsigned int i = index; i < songCount - 1; ++i)
 			songs[i] = songs[i + 1];
-		
-		// The pointer has been copied to the spot behind, 
-		// so just erase the original pointer, but don't 
-		// free the memory, that would erase the song.
-		songs[songCount--] = nullptr;
 		altered = true;
-	} else
-		std::cout << "The index is out of bounds.\n";
+		--songCount;
+	} else std::cout << "The index is out of bounds.\n";
 }
 
-int SongList::search(char* searchParameter, bool searchByArtist) const {
+int SongList::search(char *searchParameter, bool searchByArtist) const {
 	for (unsigned int i = 0; i < songCount; ++i)
 		if (contains((searchByArtist ? songs[i]->getArtist() : songs[i]->getAlbum()), searchParameter))
 			printSong(i);
@@ -81,7 +72,6 @@ void SongList::importFromFile() {
 			
 			if (linesLeft > 0) {
 				unsigned int lineLength = std::strlen(line);
-				
 				unsigned int placeToAdd = 0, indexToAdd = 0;
 				char *title = new char[MAX_CHARS]; // 0
 				char *artist = new char[MAX_CHARS]; // 1
@@ -114,13 +104,10 @@ void SongList::importFromFile() {
 				add(title, artist, (unsigned int)std::stoi(minutes), 
 					(unsigned int)std::stoi(seconds), album, true);
 				
-				// Found the memory leak
 				delete[] minutes;
 				delete[] seconds;
-				
 				--linesLeft;
-			} else
-				linesLeft = std::stoi(line);
+			} else linesLeft = std::stoi(line);
 		}
 		
 		listFile.close();
@@ -131,10 +118,7 @@ void SongList::importFromFile() {
 void SongList::exportToFile() const {
 	std::ofstream listFile(SONG_FILE);
 	if (listFile.is_open()) {
-		// Send the number of songs
 		listFile << songCount << '\n';
-		
-		// Send the song data
 		for (unsigned int i = 0; i < songCount; ++i) {
 			Song* song = songs[i];
 			listFile << song->getTitle() << FILE_DELIMITER << song->getArtist() << FILE_DELIMITER 
@@ -144,9 +128,8 @@ void SongList::exportToFile() const {
 		
 		listFile.close();
 		std::cout << "Successfully saved " << songCount << " songs to \"" << SONG_FILE << "\"\n";
-	} else
-		std::cout << "Unable to save songs. Sorry :/\n";
+	} else std::cout << "Unable to save songs. Sorry :/\n";
 }
 
 unsigned int SongList::getSongCount() const { return songCount; }
-Song* SongList::get(const unsigned int& index) const { return index < songCount ? songs[index] : nullptr; }
+Song* SongList::operator[](const unsigned int& index) const { return index < songCount ? songs[index] : nullptr; }
