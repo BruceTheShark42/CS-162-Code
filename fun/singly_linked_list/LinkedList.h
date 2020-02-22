@@ -13,7 +13,6 @@ public:
 	bool remove(const unsigned int &index);
 	void print() const;
 private:
-	T *list;
 	struct Node {
 		Node(const T &data = (T) 0);
 		
