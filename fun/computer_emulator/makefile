@@ -1,19 +1,19 @@
 # Made by Bruce Cosgrove
 
-main: main.o CPU.o Reg8.o Reg16.o
-	g++ -o main main.o CPU.o Reg8.o Reg16.o
+main: main.o Assembler.o Computer.o Reg8.o
+	g++ -o main main.o Assembler.o Computer.o Reg8.o
 
-main.o: main.cpp cpu/CPU.h cpu/reg/Reg8.h cpu/reg/Reg16.h
-	g++ -c main.cpp cpu/CPU.h cpu/reg/Reg8.h cpu/reg/Reg16.h
+main.o: main.cpp Assembler.h Computer.h Reg8.h
+	g++ -c main.cpp Assembler.h Computer.h Reg8.h
 
-CPU.o: cpu/CPU.cpp cpu/CPU.h
-	g++ -c cpu/CPU.cpp
+Assembler.o: Assembler.cpp Assembler.h
+	g++ -c Assembler.cpp
 
-Reg16.o: cpu/reg/Reg16.cpp cpu/reg/Reg16.h
-	g++ -c cpu/reg/Reg16.cpp
+Computer.o: Computer.cpp Computer.h
+	g++ -c Computer.cpp
 
-Reg8.o: cpu/reg/Reg8.cpp cpu/reg/Reg8.h
-	g++ -c cpu/reg/Reg8.cpp
+Reg8.o: Reg8.cpp Reg8.h
+	g++ -c Reg8.cpp
 
 run:
 	./main
@@ -22,4 +22,4 @@ clean:
 	rm *.o
 
 clobber:
-	rm main
+	rm main *.gch
