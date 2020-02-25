@@ -19,7 +19,7 @@ uint8_t* Assembler::assemble(const char *filePath) {
 		file.getline(line, 16);
 		if (std::strlen(line) != 0) {
 			std::cout << line;
-			std::strstream s;
+			std::sstream s;
 			s << line;
 			uint16_t decoded = lookup(s) + OFFSET;
 			program[byteIndex++] = decoded & 0x00ff;
@@ -34,7 +34,7 @@ uint8_t* Assembler::assemble(const char *filePath) {
 	return program;
 }
 
-uint16_t Assembler::lookup(std::strstream &s) {
+uint16_t Assembler::lookup(std::sstream &s) {
 	char inst[5];
 	s >> inst;
 	std::cout << " - " << inst << '\n';

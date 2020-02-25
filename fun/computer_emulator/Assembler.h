@@ -3,16 +3,13 @@
 #ifndef ASSEMBLER_H
 #define ASSEMBLER_H
 
-#include <cstdint>
-#include <strstream>
+#include <sstream>
 
 class Assembler {
 public:
-	static uint8_t* assemble(const char *filePath);
+	static char* assemble(const char *filePath);
 private:
-	static uint16_t lookup(std::strstream &s);
-public:
-	static const unsigned int OFFSET = 0x01;
+	static uint16_t lookup(std::sstream &s);
 };
 
 #endif
