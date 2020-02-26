@@ -3,6 +3,7 @@
 #include "CPU.h"
 
 #include <iostream>
+#include <iomanip>
 
 #include "Computer.h"
 
@@ -15,19 +16,20 @@ void CPU::setup(Computer *cmp) {
 
 void CPU::reset() {
 	cycles = 0;
-	af.set(0x0000);
-	bc.set(0x0000);
-	de.set(0x0000);
-	hl.set(0x0000);
-	sp.set(0xffff);
-	pc.set(0x0000);
+	af = 0x0000;
+	bc = 0x0000;
+	de = 0x0000;
+	hl = 0x0000;
+	sp = 0x0000;
+	pc = 0x0000;
 }
 
 void CPU::clock() {
 	if (cycles == 0) {
 		uint8_t instruction = fetch();
 		printStatus();
-	} else --cycles;
+	}
+	--cycles;
 }
 
 uint8_t CPU::read(const uint16_t &addr) {
@@ -36,6 +38,10 @@ uint8_t CPU::read(const uint16_t &addr) {
 
 void CPU::write(const uint16_t &addr, const uint8_t &data) {
 	cmp->ram.write(addr, data);
+}
+
+uint8_t CPU::fetch() {
+	return read(pc++);
 }
 
 // program is in format: "c721001d"
@@ -50,13 +56,12 @@ void CPU::loadProgram(char* program, const uint16_t &offset) {
 }
 
 void CPU::printStatus() {
-	std::cout << std::hex << "af=" << af.get() << " bc=" << bc.get()
-			  << " de=" << de.get() << " hl=" << hl.get()
-			  << " sp=" << sp.get() << " pc=" << pc.get() << std::dec << '\n';
-}
-
-uint8_t CPU::fetch() {
-	uint8_t byte = read(pc.get());
-	pc.set(pc.get() + 1);
-	return byte;
+	std::cout << std::hex << std::setfill('0')
+			  << " af=" << std::setw(4) << af
+			  << " bc=" << std::setw(4) << bc
+			  << " de=" << std::setw(4) << de
+			  << " hl=" << std::setw(4) << hl
+			  << " sp=" << std::setw(4) << sp
+			  << " pc=" << std::setw(4) << pc
+			  << '\n';
 }

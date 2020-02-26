@@ -1,4 +1,3 @@
-	org 0x0000
 	ld a,7
 	ld b,9
 	call mul8
@@ -11,14 +10,14 @@
 ; destroys:
 ;	af, bc
 mul8:
-	or a
+	or a ; checks if a == 0
 	ret z
 	ld c,a
 	ld a,b
-	or a
+	or a ; checks if b == 0
 	ret z
 	ld a,0
-mul8loop:
+mul8loop: ; add c to a b times
 	add a,c
 	djnz mul8loop
 	ret

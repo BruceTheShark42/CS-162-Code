@@ -2,14 +2,16 @@
 
 //#include <iostream>
 //#include <cstdint>
+#include <string>
 
-//#include "Assembler.h"
+#include "Assembler.h"
 #include "Computer.h"
 
 int main() {
 	Computer cmp;
-
-//	uint8_t *prog = Assembler::assemble("program.asm");
+	
+//	std::string program;
+//	Assembler::assemble("program.asm", program);
 //	for (unsigned int i = 0; prog[i] != '\0'; ++i)
 //		std::cout << +prog[i] << ' ';
 //	std::cout << '\n';

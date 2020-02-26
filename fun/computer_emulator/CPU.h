@@ -5,8 +5,6 @@
 
 #include <cstdint>
 
-#include "Reg16.h"
-
 class Computer;
 
 class CPU {
@@ -18,15 +16,18 @@ public:
 	void clock();
 	uint8_t read(const uint16_t &addr);
 	void write(const uint16_t &addr, const uint8_t &data);
+	uint8_t fetch();
 	void loadProgram(char *prog, const uint16_t &offset = 0);
+	void printStatus();
 private:
 	Computer *cmp;
 	uint8_t cycles;
 	
-	void printStatus();
-	uint8_t fetch();
-	
-	Reg16 af, bc, de, hl, sp, pc;
+	uint16_t af, bc, de, hl, sp, pc;
+	struct Inst {
+		const char* name;
+		uint8_t cycles;
+	};
 };
 
 #endif
