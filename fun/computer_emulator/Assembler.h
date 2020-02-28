@@ -16,9 +16,10 @@ private:
 	static void split(std::string &line, std::string delims, std::vector<std::string> &tokens);
 	static void toLowercase(std::vector<std::string> &tokens);
 	static void makeHex(std::string &number, std::string &hexNumber);
-	static void lookup(std::vector<std::string> &tokens, std::string &byteCode);
+	static bool labelValid(std::string &label);
 	static void getReg(std::string &reg, Reg8 &reg8);
 	static void getReg(std::string &reg, Reg16 &reg16);
+	static void lookup(std::vector<std::string> &tokens, const uint16_t &programLine, std::string &byteCode);
 };
 
 #endif

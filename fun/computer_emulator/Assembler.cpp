@@ -6,6 +6,7 @@
 #include <deque>
 #include <sstream>
 #include <cmath>
+#include <unordered_map>
 #include <iostream> // DEBUG
 
 void Assembler::assemble(std::string filePath, std::string &program) {
@@ -14,7 +15,7 @@ void Assembler::assemble(std::string filePath, std::string &program) {
 		return;
 	
 	program.clear();
-	std::vector<std::pair<std::string, uint16_t>> labels;
+	std::unordered_map<std::string, uint16_t> labels;
 	uint16_t fileLine = 0, programLine = 0;
 	
 	while (!file.eof()) {
@@ -39,34 +40,46 @@ void Assembler::assemble(std::string filePath, std::string &program) {
 				
 				// If the line is a label
 				if (tokens[0][0] != '\t') {
-					labels.push_back({tokens[0], programLine});
+					if (labels.find(tokens[0]) == labels.end()) {
+						if (tokens.size() == 1 && labelValid(tokens[0])) {
+							// Pushes the label name (no colon at end)
+							std::string label = tokens[0].substr(0, tokens[0].length() - 1);
+							labels.insert({label, programLine});
+							std::cout << " Added label: \"" << label << "\" on line " << (fileLine + 1);
+						} else {
+							std::cout << " NOT SUPPOSED TO HAPPEN YET???";
+						}
+					} else std::cout << " Duplicate label on line " << (fileLine + 1);
 				} else { // The line is an instruction		
-					// Remove the tab so it's easier to use
-					tokens[0] = tokens[0].substr(1);
 					// Make the instruction all lowercase so case doesn't matter
 					toLowercase(tokens);
+					
 					// Make all numbers hexadecimal
 					std::string hexNumber;
 					if (tokens.size() > 1) {
 						makeHex(tokens[1], hexNumber);
-						if (hexNumber.length() == 0)
-						std::cout << " not a number";
-						else {
+						if (hexNumber.length() != 0) {
+							tokens[1] = hexNumber;
 							hexNumber.clear();
-							std::cout << " yes a number";
 						}
 					}
 					if (tokens.size() > 2) {
 						makeHex(tokens[2], hexNumber);
-						if (hexNumber.length() == 0)
-							std::cout << " not a number";
-						else
-							std::cout << " yes a number";
+						if (hexNumber.length() != 0)
+							tokens[2] = hexNumber;
 					}
-
+					
+					// Remove the tab so it's easier to use
+					tokens[0] = tokens[0].substr(1);
+					
+					// DEBUG
+					std::cout << " before lookup: ";
+					for (unsigned int i = 0; i < tokens.size(); ++i)
+						std::cout << "\"" << tokens[i] << "\" ";
+					
 					// Try to add instruction to program
 					std::string byteCode;
-					lookup(tokens, byteCode);
+					lookup(tokens, programLine, byteCode);
 					if (byteCode.size() != 0) {
 						++programLine;
 					} else {
@@ -117,15 +130,15 @@ void Assembler::toLowercase(std::vector<std::string> &tokens) {
 }
 
 void Assembler::makeHex(std::string &number, std::string &hexNumber) {
-	unsigned char radix = 0;
-	
 	auto canBeBin = [](char c) { return c == '0' || c == '1'; };
 	auto canBeOct = [](char c) { return c > '/' && c < '8'; };
 	auto canBeDec = [](char c) { return c > '/' && c < ':'; };
 	auto canBeHex = [&](char c) { return canBeDec(c) || (c > '`' && c < 'g'); };
 	auto canBeRad = [&](char c, unsigned char radix) { return (radix == 16 && canBeHex(c)) || (radix == 10 && canBeDec(c)) || (radix == 8 && canBeOct(c)) || (radix == 2 && canBeBin(c)); };
 	
-	if (canBeHex(number[0])) { // hexadecimal/decimal/octal/binary
+	unsigned char radix = 0;
+	bool single = false;
+	if (canBeHex(number[0])) {
 		if (number[0] == '0') {
 			if (number.length() > 2) {
 				if (number[1] == 'b') radix = 2;
@@ -134,24 +147,24 @@ void Assembler::makeHex(std::string &number, std::string &hexNumber) {
 				else if (canBeDec(number[1])) radix = 10;
 			} else if (canBeDec(number[0])) radix = 10;
 		} else if (canBeDec(number[0])) radix = 10;
-	}
-	std::cout << " radix=" << +radix;
+	} else if (number[0] == '$' || number[0] == '#') { radix = 16; single = true; }
+	else if (number[0] == '@') { radix = 8; single = true; }
+	else if (number[0] == '%') { radix = 2; single = true; }
+	
 	// If invalid radix
 	if (radix == 0) return;
 	
 	// Validate that the rest of the number is correct
 	std::string num;
-	for (unsigned int i = (radix != 10 ? 2 : 0); i < number.length(); ++i) {
+	for (unsigned int i = (radix != 10 ? 2 - single: 0); i < number.length(); ++i) {
 		if (canBeRad(number[i], radix)) num += number[i];
 		else return;
 	}
-	std::cout << " valid num: \"" << num << "\"";
+	
 	// Convert from whatever radix to decimal
 	uint32_t n = 0;
-	for (unsigned int i = 0; i < number.length(); ++i)
-		n += std::pow(radix, i) * (num[i] - (canBeDec(num[i]) ? '0' : 'a'));
-	
-	std::cout << " Number is " << n << " in decimal.";
+	for (unsigned int i = 0; i < num.length(); ++i)
+		n += std::pow(radix, num.length() - 1 - i) * (num[i] - (canBeDec(num[i]) ? '0' : 'a'));
 	
 	// Convert from decimal to hexadecimal
 	do {
@@ -161,22 +174,18 @@ void Assembler::makeHex(std::string &number, std::string &hexNumber) {
 		hexNumber.insert(0, 1, (char)(digit + (digit > 9 ? 'W' : '0')));
 		n >>= 4;
 	} while (n != 0);
-	
-	std::cout << "Number is " << hexNumber << " in hexadecimal.";
 }
 
-// Checks if an instruction is valid
-// Does not alter byteCode if invalid
-// Populates byteCode if valid with hex string equivalent to the assembled instruction
-void Assembler::lookup(std::vector<std::string> &tokens, std::string &byteCode) {
-	const std::string inst = tokens[0];
-	const unsigned int count = tokens.size();
-	
-	if (!inst.compare("nop"))
-		byteCode += "00";
-	else if (!inst.compare("ld")) {
-		
+bool Assembler::labelValid(std::string &label) {
+	std::cout << ' ' << label;
+	if (label.length() < 2 || label[label.length() - 1] != ':')
+		return false;
+	for (unsigned int i = 0; i < label.length() - 1; ++i) {
+		char c = label[i];
+		if (!((c > '@' && c < '[') || (c > '`' && c < '{') || (c > '/' && c < ':') || c == '_'))
+			return false;
 	}
+	return true;
 }
 
 void Assembler::getReg(std::string &reg, Reg8 &reg8) {
@@ -213,4 +222,18 @@ void Assembler::getReg(std::string &reg, Reg16 &reg16) {
 	if (!reg.compare("iy")) reg16 = IY;
 	if (!reg.compare("sp")) reg16 = SP;
 //	if (!reg.compare("nn")) reg16 = NN; // TODO
+}
+
+// Checks if an instruction is valid
+// Does not alter byteCode if invalid
+// Populates byteCode if valid with hex string equivalent to the assembled instruction
+void Assembler::lookup(std::vector<std::string> &tokens, const uint16_t &programLine, std::string &byteCode) {
+	const std::string inst = tokens[0];
+	const unsigned int count = tokens.size();
+	
+	if (!inst.compare("nop"))
+		byteCode += "00";
+	else if (!inst.compare("ld")) {
+		
+	}
 }
