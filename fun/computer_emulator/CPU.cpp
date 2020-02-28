@@ -6,13 +6,11 @@
 #include <iomanip>
 
 #include "Computer.h"
+#include "opcodes.h"
 
 CPU::CPU() { reset(); }
-CPU::~CPU() { }
-
-void CPU::setup(Computer *cmp) {
-	this->cmp = cmp;
-}
+CPU::~CPU() {}
+void CPU::setup(Computer *cmp) { this->cmp = cmp; }
 
 void CPU::reset() {
 	cycles = 0;
@@ -20,13 +18,22 @@ void CPU::reset() {
 	bc = 0x0000;
 	de = 0x0000;
 	hl = 0x0000;
+	ix = 0x0000;
+	iy = 0x0000;
 	sp = 0x0000;
 	pc = 0x0000;
+	afP = 0x0000;
+	bcP = 0x0000;
+	deP = 0x0000;
+	hlP = 0x0000;
+	ir = 0x0000;
 }
 
 void CPU::clock() {
 	if (cycles == 0) {
-		uint8_t instruction = fetch();
+		operate(fetch());
+//		cycles = instruction.cycles;
+//		instruction.operate();
 		printStatus();
 	}
 	--cycles;
@@ -63,5 +70,17 @@ void CPU::printStatus() {
 			  << " hl=" << std::setw(4) << hl
 			  << " sp=" << std::setw(4) << sp
 			  << " pc=" << std::setw(4) << pc
+			  << " af'=" << std::setw(4) << afP
+			  << " bc'=" << std::setw(4) << bcP
+			  << " de'=" << std::setw(4) << deP
+			  << " hl'=" << std::setw(4) << hlP
+			  << " i=" << std::setw(2) << (ir >> 8)
+			  << " r=" << std::setw(2) << (ir & 0x00ff)
 			  << '\n';
+}
+
+void CPU::operate(const uint8_t &inst) {
+	switch (inst) {
+		case NOP: cycles = 4; break;
+	}
 }

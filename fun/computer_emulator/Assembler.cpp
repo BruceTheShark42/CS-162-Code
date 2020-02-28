@@ -5,6 +5,7 @@
 #include <fstream>
 #include <deque>
 #include <sstream>
+#include <cmath>
 #include <iostream> // DEBUG
 
 void Assembler::assemble(std::string filePath, std::string &program) {
@@ -44,7 +45,25 @@ void Assembler::assemble(std::string filePath, std::string &program) {
 					tokens[0] = tokens[0].substr(1);
 					// Make the instruction all lowercase so case doesn't matter
 					toLowercase(tokens);
-					
+					// Make all numbers hexadecimal
+					std::string hexNumber;
+					if (tokens.size() > 1) {
+						makeHex(tokens[1], hexNumber);
+						if (hexNumber.length() == 0)
+						std::cout << " not a number";
+						else {
+							hexNumber.clear();
+							std::cout << " yes a number";
+						}
+					}
+					if (tokens.size() > 2) {
+						makeHex(tokens[2], hexNumber);
+						if (hexNumber.length() == 0)
+							std::cout << " not a number";
+						else
+							std::cout << " yes a number";
+					}
+
 					// Try to add instruction to program
 					std::string byteCode;
 					lookup(tokens, byteCode);
@@ -97,6 +116,55 @@ void Assembler::toLowercase(std::vector<std::string> &tokens) {
 				c += 0x20;
 }
 
+void Assembler::makeHex(std::string &number, std::string &hexNumber) {
+	unsigned char radix = 0;
+	
+	auto canBeBin = [](char c) { return c == '0' || c == '1'; };
+	auto canBeOct = [](char c) { return c > '/' && c < '8'; };
+	auto canBeDec = [](char c) { return c > '/' && c < ':'; };
+	auto canBeHex = [&](char c) { return canBeDec(c) || (c > '`' && c < 'g'); };
+	auto canBeRad = [&](char c, unsigned char radix) { return (radix == 16 && canBeHex(c)) || (radix == 10 && canBeDec(c)) || (radix == 8 && canBeOct(c)) || (radix == 2 && canBeBin(c)); };
+	
+	if (canBeHex(number[0])) { // hexadecimal/decimal/octal/binary
+		if (number[0] == '0') {
+			if (number.length() > 2) {
+				if (number[1] == 'b') radix = 2;
+				else if (number[1] == 'o') radix = 8;
+				else if (number[1] == 'x') radix = 16;
+				else if (canBeDec(number[1])) radix = 10;
+			} else if (canBeDec(number[0])) radix = 10;
+		} else if (canBeDec(number[0])) radix = 10;
+	}
+	std::cout << " radix=" << +radix;
+	// If invalid radix
+	if (radix == 0) return;
+	
+	// Validate that the rest of the number is correct
+	std::string num;
+	for (unsigned int i = (radix != 10 ? 2 : 0); i < number.length(); ++i) {
+		if (canBeRad(number[i], radix)) num += number[i];
+		else return;
+	}
+	std::cout << " valid num: \"" << num << "\"";
+	// Convert from whatever radix to decimal
+	uint32_t n = 0;
+	for (unsigned int i = 0; i < number.length(); ++i)
+		n += std::pow(radix, i) * (num[i] - (canBeDec(num[i]) ? '0' : 'a'));
+	
+	std::cout << " Number is " << n << " in decimal.";
+	
+	// Convert from decimal to hexadecimal
+	do {
+		uint8_t digit = n % 0x10;
+		hexNumber.insert(0, 1, (char)(digit + (digit > 9 ? 'W' : '0')));
+		digit = (n >>= 4) % 0x10;
+		hexNumber.insert(0, 1, (char)(digit + (digit > 9 ? 'W' : '0')));
+		n >>= 4;
+	} while (n != 0);
+	
+	std::cout << "Number is " << hexNumber << " in hexadecimal.";
+}
+
 // Checks if an instruction is valid
 // Does not alter byteCode if invalid
 // Populates byteCode if valid with hex string equivalent to the assembled instruction
@@ -109,4 +177,40 @@ void Assembler::lookup(std::vector<std::string> &tokens, std::string &byteCode) 
 	else if (!inst.compare("ld")) {
 		
 	}
+}
+
+void Assembler::getReg(std::string &reg, Reg8 &reg8) {
+	if (!reg.compare("a")) reg8 = A;
+	if (!reg.compare("f")) reg8 = F;
+	if (!reg.compare("b")) reg8 = B;
+	if (!reg.compare("c")) reg8 = C;
+	if (!reg.compare("d")) reg8 = D;
+	if (!reg.compare("e")) reg8 = E;
+	if (!reg.compare("h")) reg8 = H;
+	if (!reg.compare("l")) reg8 = L;
+	if (!reg.compare("ixh")) reg8 = IXH;
+	if (!reg.compare("ixl")) reg8 = IXL;
+	if (!reg.compare("iyl")) reg8 = IYH;
+	if (!reg.compare("iyl")) reg8 = IYL;
+//	if (!reg.compare("n")) reg8 = N; // TODO
+	if (!reg.compare("(bc)")) reg8 = pBC;
+	if (!reg.compare("(de)")) reg8 = pDE;
+	if (!reg.compare("(hl)")) reg8 = pHL;
+//	if (!reg.compare("(ix+n)")) reg8 = pIXpN; // TODO
+//	if (!reg.compare("(iy+n)")) reg8 = pIYpN; // TODO
+	if (!reg.compare("(sp)")) reg8 = pSP;
+//	if (!reg.compare("(nn)")) reg8 = pNN; // TODO
+	if (!reg.compare("i")) reg8 = I;
+	if (!reg.compare("r")) reg8 = R;
+}
+
+void Assembler::getReg(std::string &reg, Reg16 &reg16) {
+	if (!reg.compare("af")) reg16 = AF;
+	if (!reg.compare("bc")) reg16 = BC;
+	if (!reg.compare("de")) reg16 = DE;
+	if (!reg.compare("hl")) reg16 = HL;
+	if (!reg.compare("ix")) reg16 = IX;
+	if (!reg.compare("iy")) reg16 = IY;
+	if (!reg.compare("sp")) reg16 = SP;
+//	if (!reg.compare("nn")) reg16 = NN; // TODO
 }
