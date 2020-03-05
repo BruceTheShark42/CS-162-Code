@@ -8,6 +8,45 @@
 
 #include "util.h"
 
+// Song
+SongList::Song::Song(char *title, char *artist, const unsigned int &minutes, const unsigned int &seconds, char *album) {
+	duration.minutes = minutes + seconds / 60;
+	duration.seconds = seconds % 60;
+	this->title = new char[std::strlen(title) + 1];
+	std::strcpy(this->title, title);
+	this->artist = new char[std::strlen(artist) + 1];
+	std::strcpy(this->artist, artist);
+	this->album = new char[std::strlen(album) + 1];
+	std::strcpy(this->album, album);
+}
+
+SongList::Song::~Song() {
+	delete[] title;
+	delete[] artist;
+	delete[] album;
+}
+
+char* SongList::Song::getTitle() const { return title; }
+char* SongList::Song::getArtist() const { return artist; }
+unsigned int SongList::Song::getMinutes() const { return duration.minutes; }
+unsigned int SongList::Song::getSeconds() const { return duration.seconds; }
+char* SongList::Song::getAlbum() const { return album; }
+
+void SongList::Song::print() const {
+	std::cout << "    - Title: " << title << '\n'
+		  << "    - Artist: " << artist << '\n'
+		  << "    - Duration: " << duration.minutes << ':' << (duration.seconds < 10 ? "0" : "") << duration.seconds << '\n'
+		  << "    - Album: " << album << '\n';
+}
+
+// Node
+SongList::Node::Node(Song *song, Node *next) : song(song), next(next) {}
+SongList::Node::Node(Node *prev, Song *song) : song(song), next(prev->next) { prev->next = this; }
+SongList::Node::~Node() { delete song; }
+
+// SongList
+int SongList::Song::compare(const Song &song) { return std::strcmp(title, song.title); }
+
 SongList::SongList() : head(new Node()), songCount(0), altered(false) {
 	importFromFile();
 }
@@ -101,22 +140,21 @@ void SongList::importFromFile() {
 }
 
 void SongList::exportToFile() const {
-	std::ofstream listFile(SONG_FILE);
-	if (listFile.is_open()) {
-		listFile << songCount << '\n';
+	std::ofstream file(SONG_FILE);
+	if (file.is_open()) {
+		file << songCount << '\n';
 		for (Node *node = head->next; node != nullptr; node = node->next) {
 			Song *song = node->song;
-			listFile << song->getTitle() << FILE_DELIMITER << song->getArtist() << FILE_DELIMITER 
-					 << song->getMinutes() << FILE_DELIMITER << song->getSeconds() << FILE_DELIMITER
-					 << song->getAlbum() << '\n';
+			file << song->title << FILE_DELIMITER << song->artist << FILE_DELIMITER 
+				 << song->duration.minutes << FILE_DELIMITER << song->duration.seconds << FILE_DELIMITER
+				 << song->album << '\n';
 		}
 		
-		listFile.close();
+		file.close();
 		std::cout << "Successfully saved " << songCount << " songs to \"" << SONG_FILE << "\"\n";
 	} else std::cout << "Unable to save songs. Sorry :/\n";
 }
 
-unsigned int SongList::getSongCount() const { return songCount; }
 SongList::Song* SongList::operator[](const unsigned int& index) const {
 	Node *node = head->next;
 	for (unsigned int i = 0; i < index && node != nullptr; ++i, node = node->next);
@@ -124,40 +162,4 @@ SongList::Song* SongList::operator[](const unsigned int& index) const {
 	else return nullptr;
 }
 
-// Node
-SongList::Node::Node(Song *song, Node *next) : song(song), next(next) {}
-SongList::Node::Node(Node *prev, Song *song) : song(song), next(prev->next) { prev->next = this; }
-SongList::Node::~Node() { delete song; }
-
-// Song
-SongList::Song::Song(char *title, char *artist, const unsigned int &minutes, const unsigned int &seconds, char *album) {
-	duration.minutes = minutes + seconds / 60;
-	duration.seconds = seconds % 60;
-	this->title = new char[std::strlen(title) + 1];
-	std::strcpy(this->title, title);
-	this->artist = new char[std::strlen(artist) + 1];
-	std::strcpy(this->artist, artist);
-	this->album = new char[std::strlen(album) + 1];
-	std::strcpy(this->album, album);
-}
-
-SongList::Song::~Song() {
-	delete[] title;
-	delete[] artist;
-	delete[] album;
-}
-
-char* SongList::Song::getTitle() const { return title; }
-char* SongList::Song::getArtist() const { return artist; }
-unsigned int SongList::Song::getMinutes() const { return duration.minutes; }
-unsigned int SongList::Song::getSeconds() const { return duration.seconds; }
-char* SongList::Song::getAlbum() const { return album; }
-
-void SongList::Song::print() const {
-	std::cout << "    - Title: " << title << '\n'
-		  << "    - Artist: " << artist << '\n'
-		  << "    - Duration: " << duration.minutes << ':' << (duration.seconds < 10 ? "0" : "") << duration.seconds << '\n'
-		  << "    - Album: " << album << '\n';
-}
-
-int SongList::Song::compare(const Song &song) { return std::strcmp(title, song.title); }
+unsigned int SongList::getSongCount() const { return songCount; }
