@@ -5,59 +5,44 @@
 #include <iostream>
 #include <cstring>
 
-// Returns a char[] entered by the user
-char* getString(const char *message) {
+String getString(const char *message) {
+	// Print the message
 	std::cout << message;
+	String in;
 	
-	unsigned int length = 0;
-	unsigned int maxLength = 16;
-	char *in = new char[maxLength];
-	char c;
-	do {
-		std::cin.get(c);
-		if (length < maxLength) {
-			in[length++] = c;
-		} else {
-			char *newIn = new char[maxLength <<= 1];
-			memcpy(newIn, in, length);
-			newIn[length++] = c;
-			delete[] in;
-			in = newIn;
-		}
-	} while (c != '\n');
+	// Get user input
+	for (char c = std::cin.get(); c != '\n'; c = std::cin.get())
+		in.append(c);
 	
-	std::cin.get();
+	// Help clean up io stuff
 	if (!std::cin) {
 		std::cin.clear();
 		std::cin.get();
 	}
-	
 	return in;
 }
 
 int getInt(const char *message, const int &returnError) {
-	char *numberInput = getString(message);
+	String numberInput = getString(message);
 	
 	// Validate input
 	bool valid = true;
-	if (!std::strlen(numberInput)) {
+	unsigned int len = numberInput.getLength();
+	if (len == 0) {
 		valid = false;
 		std::cout << "No number present.\n";
 	}
 	
-	for (unsigned int i = 0; valid && numberInput[i]; ++i)
+	for (unsigned int i = 0; valid && i < len; ++i)
 		if (numberInput[i] < '0' || numberInput[i] > '9') {
 			valid = false;
 			std::cout << "Invalid number.\n";
 		}
 	
 	if (valid) {
-		int number = std::stoi(numberInput);
-		delete[] numberInput;
-		return number;
+		return std::stoi(numberInput.getChars());
 	} else {
 		std::cout << "Defaulting to " << returnError << ".\n";
-		delete[] numberInput;
 		return returnError;
 	}
 }

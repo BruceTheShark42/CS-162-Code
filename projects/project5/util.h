@@ -3,9 +3,9 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#define MAX_CHARS 100
+#include "String.h"
 
-char* getString(const char *message);
+String getString(const char *message);
 int getInt(const char *message, const int &returnError = 0);
 bool contains(char *str1, const char *str2);
 bool contains(char *str, char c);
