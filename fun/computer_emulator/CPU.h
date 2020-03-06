@@ -6,8 +6,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "registers.h"
-
 class Computer;
 
 class CPU {

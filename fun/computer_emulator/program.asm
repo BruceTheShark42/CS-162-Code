@@ -1,5 +1,6 @@
-	ld a,7
-	ld b,9
+	nop
+	ld a,13
+	ld b,7
 	call mul8
 	ret
 	
