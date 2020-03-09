@@ -13,5 +13,9 @@ int main() {
 	l.print();
 	l.remove(2);
 	l.print();
+	l.remove(0);
+	l.print();
+	l.remove(0);
+	l.print();
 	return 0;
 }

@@ -23,7 +23,7 @@ void LinkedList<T>::insert(const unsigned int index, const T &data) {
 // Inserts the 6 one index too far right
 template<class T>
 void LinkedList<T>::insertRec(const unsigned int index, Node *node, const T &data) {
-	if (index - 1 < size && node->next != nullptr)
+	if (index != 0 && index < size && node->next != nullptr)
 		insertRec(index + 1, node->next, data);
 	else new Node(node, data);
 }
@@ -48,10 +48,12 @@ T LinkedList<T>::removeRec(const unsigned int index, Node *node) {
 }
 
 template<class T>
-T& LinkedList<T>::operator[](const unsigned int index) { return subscriptOperatorRec(index, head); }
+T& LinkedList<T>::operator[](const unsigned int index) { return subscriptOperatorRec(index, head->next); }
 
 template<class T>
-T& LinkedList<T>::subscriptOperatorRec(const unsigned int index, Node *node) { return index < size ? subscriptOperatorRec(index + 1, node->next) : node->data; }
+T& LinkedList<T>::subscriptOperatorRec(const unsigned int index, Node *node) {
+	return index > 0 ? subscriptOperatorRec(index - 1, node->next) : node->data;
+}
 
 template<class T>
 unsigned int LinkedList<T>::getSize() const { return size; }
