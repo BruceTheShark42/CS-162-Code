@@ -1,11 +1,17 @@
 // Made by Bruce Cosgrove
 
-#include "Vec2.h"
+#include "Vec3.h"
 #include <iostream>
 
 int main() {
-	Vec2f a(1.0f, 0.0f), b(0.0f, 1.0f);
+	Vec3f a(1.0f, 0.0f, 2.0f), b(0.0f, 1.0f, 0.0f);
 	std::cout << "a.dot(b) / (a.mag() * b.mag())=" << (a.dot(b) / (a.mag() * b.mag())) << '\n';
+	std::cout << "a=";
+	a.print();
+	std::cout << "b=";
+	b.print();
+	std::cout << "a.cpd(b)=";
+	a.cpd(b).print();
 	std::cout << "a=";
 	a.print();
 	std::cout << "b=";
