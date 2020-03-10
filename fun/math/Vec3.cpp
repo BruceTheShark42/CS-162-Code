@@ -11,41 +11,41 @@ template<class T> Vec3<T>::Vec3(const Vec3 &v) : x(v.x), y(v.y), z(v.z) {}
 
 // Addition
 template<class T> Vec3<T>& Vec3<T>::add(T x, T y, T z) { this->x += x; this->y += y; this->z += z; return *this; }
-template<class T> Vec3<T>& Vec3<T>::add(const Vec3 &v) { x += v.x; y += v.y; z += v.z; return *this; }
+template<class T> Vec3<T>& Vec3<T>::add(const Vec3 &v) { return add(v.x, v.y, v.z); }
 template<class T> Vec3<T>  Vec3<T>::operator+(const Vec3 &v) { return Vec3(x + v.x, y + v.y, z + v.z); }
-template<class T> Vec3<T>& Vec3<T>::operator+=(const Vec3 &v) { x += v.x; y += v.y; z += v.z; return *this; }
+template<class T> Vec3<T>& Vec3<T>::operator+=(const Vec3 &v) { return add(v.x, v.y, v.z); }
 
 // Subtraction
 template<class T> Vec3<T>& Vec3<T>::sub(T x, T y, T z) { this->x -= x; this->y -= y; this->z -= z; return *this; }
-template<class T> Vec3<T>& Vec3<T>::sub(const Vec3 &v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+template<class T> Vec3<T>& Vec3<T>::sub(const Vec3 &v) { return sub(v.x, v.y, v.z); }
 template<class T> Vec3<T>  Vec3<T>::operator-(const Vec3 &v) { return Vec3(x - v.x, y - v.y, z - v.z); }
-template<class T> Vec3<T>& Vec3<T>::operator-=(const Vec3 &v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
+template<class T> Vec3<T>& Vec3<T>::operator-=(const Vec3 &v) { return sub(v.x, v.y, v.z); }
 
 // Multiplication
 template<class T> Vec3<T>& Vec3<T>::mul(T x, T y, T z) { this->x *= x; this->y *= y; this->z *= z; return *this; }
-template<class T> Vec3<T>& Vec3<T>::mul(const Vec3 &v) { x *= v.x; y *= v.y; z *= v.z; return *this; }
-template<class T> Vec3<T>& Vec3<T>::mul(T k) { x *= k; y *= k; z *= k; return *this; }
+template<class T> Vec3<T>& Vec3<T>::mul(const Vec3 &v) { return mul(v.x, v.y, v.z); }
+template<class T> Vec3<T>& Vec3<T>::mul(T k) { return mul(k, k, k); }
 template<class T> Vec3<T>  Vec3<T>::operator*(const Vec3 &v) { return Vec3(x * v.x, y * v.y, z * v.z); }
-template<class T> Vec3<T>& Vec3<T>::operator*=(const Vec3 &v) { x *= v.x; y *= v.y; z *= v.z; return *this; }
+template<class T> Vec3<T>& Vec3<T>::operator*=(const Vec3 &v) { return mul(v.x, v.y, v.z); }
 template<class T> Vec3<T>  Vec3<T>::operator*(T k) { return Vec3(x * k, y * k, z * k); }
-template<class T> Vec3<T>& Vec3<T>::operator*=(T k) { x *= k; y *= k; z *= k; return *this; }
+template<class T> Vec3<T>& Vec3<T>::operator*=(T k) { return mul(k, k, k); }
 
 // Division
 template<class T> Vec3<T>& Vec3<T>::div(T x, T y, T z) { this->x /= x; this->y /= y; this->z /= z; return *this; }
-template<class T> Vec3<T>& Vec3<T>::div(const Vec3 &v) { x /= v.x; y /= v.y; z /= v.z; return *this; }
-template<class T> Vec3<T>& Vec3<T>::div(T k) { x /= k; y /= k; z /= k; return *this; }
+template<class T> Vec3<T>& Vec3<T>::div(const Vec3 &v) { return div(v.x, v.y, v.z); }
+template<class T> Vec3<T>& Vec3<T>::div(T k) { return div(k, k, k); }
 template<class T> Vec3<T>  Vec3<T>::operator/(const Vec3 &v) { return Vec3(x / v.x, y / v.y, z / v.z); }
-template<class T> Vec3<T>& Vec3<T>::operator/=(const Vec3 &v) { x /= v.x; y /= v.y; z /= v.z; return *this; }
+template<class T> Vec3<T>& Vec3<T>::operator/=(const Vec3 &v) { return div(v.x, v.y, v.z); }
 template<class T> Vec3<T>  Vec3<T>::operator/(T k) { return Vec3(x / k, y / k, z / k); }
-template<class T> Vec3<T>& Vec3<T>::operator/=(T k) { x /= k; y /= k; z /= k; return *this; }
+template<class T> Vec3<T>& Vec3<T>::operator/=(T k) { return div(k, k, k); }
 
 // Dot Product
 template<class T> T Vec3<T>::dot(T x, T y, T z) { return this->x * x + this->y * y + this->z * z; }
-template<class T> T Vec3<T>::dot(const Vec3 &v) { return x * v.x + y * v.y + z * v.z; }
+template<class T> T Vec3<T>::dot(const Vec3 &v) { return dot(v.x, v.y, v.z); }
 
 // Cross Product
 template<class T> Vec3<T> Vec3<T>::cpd(T x, T y, T z) { return Vec3(this->y * z - this->z * y, this->z * x - this->x * z, this->x * y - this->y * x); }
-template<class T> Vec3<T> Vec3<T>::cpd(const Vec3 &v) { return Vec3(y * v.z - z * v.y, z * v.x - x *v. z, x * v.y - y * v.x); }
+template<class T> Vec3<T> Vec3<T>::cpd(const Vec3 &v) { return cpd(v.x, v.y, v.x); }
 
 // Magnitude
 template<class T> T Vec3<T>::mag() { return std::sqrt(dot(x, y, z)); }

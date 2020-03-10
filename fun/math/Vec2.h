@@ -44,6 +44,9 @@ struct Vec2 {
 	T dot(T x, T y);
 	T dot(const Vec2 &v);
 	
+	// Cross Product
+	Vec2 cpd();
+	
 	// Magnitude
 	T mag();
 	

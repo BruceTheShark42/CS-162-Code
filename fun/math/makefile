@@ -1,7 +1,7 @@
 # Made by Bruce Cosrove
 
-main: main.o Vec2.o Vec3.o
-	g++ -o main main.o Vec2.o Vec3.o
+main: main.o Vec2.o Vec3.o Vec4.o
+	g++ -o main main.o Vec2.o Vec3.o Vec4.o
 
 main.o: main.cpp Vec2.h Vec3.h
 	g++ -c main.cpp
@@ -11,6 +11,9 @@ Vec2.o: Vec2.cpp Vec2.h
 
 Vec3.o: Vec3.cpp Vec3.h
 	g++ -c Vec3.cpp Vec3.h
+
+Vec4.o: Vec4.cpp Vec4.h
+	g++ -c Vec4.cpp Vec4.h
 
 run:
 	./main
