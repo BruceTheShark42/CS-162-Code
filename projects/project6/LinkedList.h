@@ -8,9 +8,13 @@ class LinkedList {
 public:
 	LinkedList();
 	~LinkedList();
-	void insert(const unsigned int index, const T &data);
-	T remove(const unsigned int index);
-	T& operator[](const unsigned int index);
+	void pushFront(const T &data);
+	void pushBack(const T &data);
+	void insert(unsigned int index, const T &data);
+	T popFront();
+	T popBack();
+	T remove(unsigned int index);
+	T& operator[](unsigned int index);
 	unsigned int getSize() const;
 	void print() const;
 private:
@@ -20,9 +24,10 @@ private:
 		T data;
 		Node *next;
 	};
-	void insertRec(const unsigned int index, Node *node, const T &data);
-	T removeRec(const unsigned int index, Node *node);
-	T& subscriptOperatorRec(const unsigned int index, Node *node);
+	void deleteRec(Node *prev);
+	void insertRec(unsigned int index, Node *node, const T &data);
+	T removeRec(unsigned int index, Node *node);
+	T& subscriptOperatorRec(unsigned int index, Node *node);
 	void printRec(Node *node) const;
 	
 	Node *head;

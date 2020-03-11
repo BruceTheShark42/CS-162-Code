@@ -8,35 +8,71 @@ LinkedList<T>::LinkedList() : head(new Node()), size(0) {}
 
 template<class T>
 LinkedList<T>::~LinkedList() {
-	for (Node *node = head, *next; node != nullptr; node = next) {
-		next = node->next;
-		delete node;
+	deleteRec(head);
+}
+
+template<class T>
+void LinkedList<T>::deleteRec(Node *prev) {
+	if (prev != nullptr) {
+		Node *next = prev->next;
+		delete prev;
+		deleteRec(next);
 	}
 }
 
 template<class T>
-void LinkedList<T>::insert(const unsigned int index, const T &data) {
-	insertRec(index, head, data);
+void LinkedList<T>::pushFront(const T &data) {
+	insertRec(0, head, data);
 	++size;
+}
+
+template<class T>
+void LinkedList<T>::pushBack(const T &data) {
+	++size;
+	insertRec(size - 1, head, data);
+}
+
+template<class T>
+void LinkedList<T>::insert(unsigned int index, const T &data) {
+	if (index < size) {
+		insertRec(index, head, data);
+		++size;
+	} else pushBack(data);
 }
 
 // Inserts the 6 one index too far right
 template<class T>
-void LinkedList<T>::insertRec(const unsigned int index, Node *node, const T &data) {
+void LinkedList<T>::insertRec(unsigned int index, Node *node, const T &data) {
 	if (index != 0 && index < size && node->next != nullptr)
 		insertRec(index + 1, node->next, data);
 	else new Node(node, data);
 }
 
 template<class T>
-T LinkedList<T>::remove(const unsigned int index) {
-	removeRec(index, head);
+T LinkedList<T>::popFront() {
 	--size;
+	return removeRec(0, head);
 }
 
 template<class T>
-T LinkedList<T>::removeRec(const unsigned int index, Node *node) {
-	if (index - 1 < size && node->next != nullptr) {
+T LinkedList<T>::popBack() {
+	T data = removeRec(size - 1, head);
+	--size;
+	return data;
+}
+
+template<class T>
+T LinkedList<T>::remove(unsigned int index) {
+	if (index < size) {
+		T data = removeRec(index - 1, head);
+		--size;
+		return data;
+	} else return popBack();
+}
+
+template<class T>
+T LinkedList<T>::removeRec(unsigned int index, Node *node) {
+	if (index < size && index != 0 && node->next != nullptr) {
 		return removeRec(index + 1, node->next);
 	} else {
 		Node *toDelete = node->next;
@@ -48,10 +84,10 @@ T LinkedList<T>::removeRec(const unsigned int index, Node *node) {
 }
 
 template<class T>
-T& LinkedList<T>::operator[](const unsigned int index) { return subscriptOperatorRec(index, head->next); }
+T& LinkedList<T>::operator[](unsigned int index) { return subscriptOperatorRec(index, head->next); }
 
 template<class T>
-T& LinkedList<T>::subscriptOperatorRec(const unsigned int index, Node *node) {
+T& LinkedList<T>::subscriptOperatorRec(unsigned int index, Node *node) {
 	return index > 0 ? subscriptOperatorRec(index - 1, node->next) : node->data;
 }
 
