@@ -28,8 +28,8 @@ void LinkedList<T>::pushFront(const T &data) {
 
 template<class T>
 void LinkedList<T>::pushBack(const T &data) {
+	insertRec(size, head, data);
 	++size;
-	insertRec(size - 1, head, data);
 }
 
 template<class T>
@@ -40,11 +40,10 @@ void LinkedList<T>::insert(unsigned int index, const T &data) {
 	} else pushBack(data);
 }
 
-// Inserts the 6 one index too far right
 template<class T>
 void LinkedList<T>::insertRec(unsigned int index, Node *node, const T &data) {
-	if (index != 0 && index < size && node->next != nullptr)
-		insertRec(index + 1, node->next, data);
+	if (index != 0 && node->next != nullptr)
+		insertRec(index - 1, node->next, data);
 	else new Node(node, data);
 }
 
@@ -56,24 +55,21 @@ T LinkedList<T>::popFront() {
 
 template<class T>
 T LinkedList<T>::popBack() {
-	T data = removeRec(size - 1, head);
-	--size;
-	return data;
+	return removeRec(--size, head);
 }
 
 template<class T>
 T LinkedList<T>::remove(unsigned int index) {
 	if (index < size) {
-		T data = removeRec(index - 1, head);
 		--size;
-		return data;
+		return removeRec(index, head);
 	} else return popBack();
 }
 
 template<class T>
 T LinkedList<T>::removeRec(unsigned int index, Node *node) {
-	if (index < size && index != 0 && node->next != nullptr) {
-		return removeRec(index + 1, node->next);
+	if (index != 0 && node->next != nullptr) {
+		return removeRec(index - 1, node->next);
 	} else {
 		Node *toDelete = node->next;
 		T data = toDelete->data;
