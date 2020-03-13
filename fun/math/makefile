@@ -1,9 +1,9 @@
 # Made by Bruce Cosrove
 
-main: main.o Mat.o
-	g++ -o main main.o Mat.o
+main: main.o Complex.o
+	g++ -o main main.o Complex.o
 
-main.o: main.cpp Mat.h
+main.o: main.cpp Complex.h
 	g++ -c main.cpp
 
 #Vec2.o: Vec2.cpp Vec2.h
@@ -15,8 +15,11 @@ main.o: main.cpp Mat.h
 #Vec4.o: Vec4.cpp Vec4.h
 #	g++ -c Vec4.cpp Vec4.h
 
-Mat.o: Mat.cpp Mat.h
-	g++ -c Mat.cpp Mat.h
+#Mat.o: Mat.cpp Mat.h
+#	g++ -c Mat.cpp Mat.h
+
+Complex.o: Complex.cpp Complex.h
+	g++ -c Complex.cpp Complex.h
 
 run:
 	./main

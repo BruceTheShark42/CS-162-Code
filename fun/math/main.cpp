@@ -1,15 +1,9 @@
 // Made by Bruce Cosgrove
 
-#include "Mat.h"
+#include "Complex.h"
 
 int main() {
-	Matf a(3, 3, false);
-	a(0, 0) = 3;
-	a(0, 2) = 2;
-	a(1, 0) = 2;
-	a(1, 2) = -2;
-	a(2, 1) = 1;
-	a(2, 2) = 1;
-	Matf::print(Matf::inverse(a));
+	Cplxf a(6.0f, 3.0f), b(7.0f, -1.0f);
+	(a * b).print();
 	return 0;
 }
