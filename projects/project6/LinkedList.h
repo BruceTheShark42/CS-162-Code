@@ -12,6 +12,7 @@ public:
 	double popFront();
 	double popBack();
 	double remove(const unsigned int index);
+	unsigned int count(const double data) const;
 	unsigned int getSize() const;
 	void print() const;
 private:
@@ -23,6 +24,7 @@ private:
 	};
 	void deleteRec(Node *prev);
 	void insertRec(const unsigned int index, Node *node, const double data);
+	unsigned int countRec(const double data, Node *node) const;
 	double removeRec(const unsigned int index, Node *node);
 	unsigned int getSizeRec(Node *node, const unsigned int size) const;
 	void printRec(Node *node) const;

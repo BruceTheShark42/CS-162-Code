@@ -2,6 +2,7 @@
 
 #include "LinkedList.h"
 #include <iostream>
+#include <cmath>
 
 // LinkedList
 LinkedList::LinkedList() : head(new Node()) {}
@@ -61,6 +62,14 @@ double LinkedList::removeRec(const unsigned int index, Node *node) {
 	node->next = toDelete->next;
 	delete toDelete;
 	return data;
+}
+
+unsigned int LinkedList::count(const double data) const {
+	return countRec(data, head->next);
+}
+
+unsigned int LinkedList::countRec(const double data, Node *node) const {
+	return (node != nullptr ? (std::abs(node->data - data) < 0.00000000000001) + countRec(data, node->next) : 0);
 }
 
 unsigned int LinkedList::getSize() const {
