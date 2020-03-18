@@ -5,7 +5,7 @@ using namespace std;
 
 double sumLoop(double* ptr, size_t size) {
 	double sum = 0.0;
-    for (size_t i = 0; i < size; ++i)
+	for (size_t i = 0; i < size; ++i)
 		sum += ptr[i];
 	return sum;
 }
